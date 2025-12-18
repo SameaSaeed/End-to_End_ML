@@ -75,7 +75,7 @@ jobs:
 
       - name: Wait for rollout to finish
         run: |
-          kubectl rollout status deployment/model-api --timeout=300s
+          kubectl rollout status deployment/model-api --timeout=600s
 
       - name: Check Pod Statuses (Debugging Step)
         run: |
