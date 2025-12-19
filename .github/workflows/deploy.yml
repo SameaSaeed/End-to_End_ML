@@ -70,9 +70,6 @@ jobs:
       - name: Apply Service
         run: |
           kubectl apply -f K8s/service.yaml
-        run: |
-          kubectl get pods -l app=model-api
-          kubectl describe deployment model-api
 
       - name: Wait for rollout to finish
         run: |
