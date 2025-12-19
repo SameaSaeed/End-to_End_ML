@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -29,7 +30,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-24.04
-    needs: test   # ensures deploy runs only if tests pass
+    needs: test
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -39,7 +40,6 @@ jobs:
         with:
           minikube version: 'v1.36.0'
           kubernetes version: 'v1.32.0'
-          github token: ${{ secrets.GITHUB_TOKEN }}
           driver: docker
 
       - name: Use Minikube Docker daemon
@@ -47,8 +47,7 @@ jobs:
           eval $(minikube -p minikube docker-env)
 
       - name: Build Docker image inside Minikube
-        run: |
-          docker build -t model-api:latest .
+        run: docker build -t model-api:latest .
 
       - name: Load image into Minikube
         run: |
@@ -56,26 +55,36 @@ jobs:
           minikube image ls
 
       - name: Apply ConfigMap
-        run: |
-          kubectl apply -f K8s/config.yaml
+        run: kubectl apply -f K8s/config.yaml
 
       - name: Apply ServiceAccount (optional)
-        run: |
-          kubectl apply -f K8s/serviceaccount.yaml
+        run: kubectl apply -f K8s/serviceaccount.yaml
 
       - name: Apply Deployment
-        run: |
-          kubectl apply -f K8s/deployment.yaml
+        run: kubectl apply -f K8s/deployment.yaml
 
       - name: Apply Service
-        run: |
-          kubectl apply -f K8s/service.yaml
+        run: kubectl apply -f K8s/service.yaml
 
-      - name: Wait for rollout to finish
+      - name: Wait for rollout and fetch logs on failure
         run: |
-          kubectl rollout status deployment/model-api --timeout=600s
-
-      - name: Check Pod Statuses (Debugging Step)
-        run: |
-          kubectl get pods -l app=model-api
-          kubectl describe deployment model-api
+          set -e
+          echo "Waiting for deployment rollout..."
+          if ! kubectl rollout status deployment/model-api --timeout=600s; then
+            echo "Deployment rollout failed!"
+            echo "=== Pod Statuses ==="
+            kubectl get pods -l app=model-api
+            echo "=== Fetching logs from first failing container ==="
+            failing_pod=$(kubectl get pods -l app=model-api -o jsonpath='{.items[?(@.status.phase!="Running")].metadata.name}' | awk '{print $1}')
+            if [ -n "$failing_pod" ]; then
+              echo "Logs for $failing_pod:"
+              kubectl logs $failing_pod --all-containers
+            else
+              echo "No non-running pods found; printing all pod logs..."
+              for pod in $(kubectl get pods -l app=model-api -o name); do
+                echo "Logs for $pod:"
+                kubectl logs $pod --all-containers || true
+              done
+            fi
+            exit 1
+          fi
