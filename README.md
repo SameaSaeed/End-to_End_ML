@@ -158,14 +158,6 @@ flowchart TD
     G --> H[Monitoring]
 ```
 
----
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
----
-
 ## Contact
 
 For questions or support, please open an issue on GitHub or contact the maintainer directly through their GitHub profile.
