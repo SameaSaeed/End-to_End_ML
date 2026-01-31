@@ -128,7 +128,7 @@ output_path: outputs/
 
 ## Contributing
 
-We welcome contributions! To get started:
+Contributions are welcomed! To get started:
 
 - Fork the repository and create a new branch for your feature or bugfix.
 - Write clear, maintainable code and update/add tests as needed.
