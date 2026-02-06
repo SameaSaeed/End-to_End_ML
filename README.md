@@ -110,35 +110,10 @@ Enable the config: sudo ln -s /etc/nginx/sites-available/ab_testing /etc/nginx/s
 
 Test A/B traffic routing: curl -X POST http://localhost:8080/predict -H "Content-Type: application/json" -d '{}'
 
-## Configuration
+## Output
 
-The pipeline is highly configurable via YAML or JSON files. Main configuration parameters include:
+<img width="1734" height="780" alt="Batch_predict" src="https://github.com/user-attachments/assets/a1c7a06c-b5af-42e2-a278-fcffbd126545" />
 
-- **data_path:** Path to your CSV or dataset file.
-- **target_column:** Name of the target variable for prediction.
-- **preprocessing:** Specify steps like missing value imputation, encoding, scaling.
-- **model:** Choose the algorithm (e.g., RandomForest, SVM, LogisticRegression), and set hyperparameters.
-- **evaluation:** Metrics to compute (accuracy, precision, recall, etc.).
-- **output_path:** Where to save models, logs, and reports.
-
-Example config snippet (YAML):
-
-```yaml
-data_path: data/train.csv
-target_column: "label"
-preprocessing:
-  impute: "mean"
-  encode: "onehot"
-  scale: "standard"
-model:
-  type: "RandomForest"
-  params:
-    n_estimators: 100
-    max_depth: 10
-evaluation:
-  metrics: ["accuracy", "f1", "roc_auc"]
-output_path: outputs/
-```
 
 ## Contributing
 
