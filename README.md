@@ -32,6 +32,21 @@ To run this project, make sure your environment meets the following requirements
 
 You can install all core dependencies using the provided requirements file.
 
+## Project Architecture
+
+Below is an overview of the pipeline structure and data flow:
+
+```mermaid
+flowchart TD
+    A[Raw Data] --> B[Data Preprocessing]
+    B --> C[Feature Engineering]
+    C --> D[Model Training]
+    D --> E[Model Evaluation]
+    E --> F[Model Selection]
+    F --> G[Deployment]
+    G --> H[Monitoring]
+```
+
 ## Installation
 
 Follow these steps to set up the project on your local machine:
@@ -113,39 +128,6 @@ Test A/B traffic routing: curl -X POST http://localhost:8080/predict -H "Content
 ## Output
 
 <img width="1734" height="780" alt="Batch_predict" src="https://github.com/user-attachments/assets/a1c7a06c-b5af-42e2-a278-fcffbd126545" />
-
-
-## Contributing
-
-Contributions are welcomed! To get started:
-
-- Fork the repository and create a new branch for your feature or bugfix.
-- Write clear, maintainable code and update/add tests as needed.
-- Submit a pull request with a detailed description of your changes.
-
-### Guidelines
-
-- Follow PEP8 coding standards.
-- Write docstrings and comments for clarity.
-- Update the README or documentation for any user-facing changes.
-- Open an issue to discuss major features before starting.
-
----
-
-## Project Architecture
-
-Below is an overview of the pipeline structure and data flow:
-
-```mermaid
-flowchart TD
-    A[Raw Data] --> B[Data Preprocessing]
-    B --> C[Feature Engineering]
-    C --> D[Model Training]
-    D --> E[Model Evaluation]
-    E --> F[Model Selection]
-    F --> G[Deployment]
-    G --> H[Monitoring]
-```
 
 ## Contact
 
