@@ -96,6 +96,20 @@ python main.py --config configs/classification_example.yaml
 
 - Serve the best model using the provided API scripts or Dockerfile.
 
+#### AB testing
+Run both models in separate terminals:
+
+Terminal 1
+python3 app1.py
+
+Terminal 2
+python3 app2.py
+
+Configure Nginx for A/B Traffic Split sudo nano /etc/nginx/sites-available/ab_testing
+Enable the config: sudo ln -s /etc/nginx/sites-available/ab_testing /etc/nginx/sites-enabled/ sudo nginx -t sudo systemctl restart nginx
+
+Test A/B traffic routing: curl -X POST http://localhost:8080/predict -H "Content-Type: application/json" -d '{}'
+
 ## Configuration
 
 The pipeline is highly configurable via YAML or JSON files. Main configuration parameters include:
